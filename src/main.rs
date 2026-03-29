@@ -8,8 +8,8 @@ use futures_util::stream::BoxStream;
 use iced::{
     Alignment, Element, Length, Size, Subscription, Task, Theme, application, keyboard, time,
     widget::{
-        button, button as button_widget, checkbox, column, container, pick_list, row, slider, text,
-        text_input,
+        button, button as button_widget, checkbox, column, container, pick_list, row, scrollable,
+        slider, text, text_input,
     },
     window,
 };
@@ -537,7 +537,11 @@ fn view(app: &Taffy) -> Element<'_, Message> {
 
     content = content.push(help_view());
 
-    container(content.padding(20).max_width(520))
+    let scrolled = scrollable(content.padding(20).max_width(520))
+        .width(Length::Fill)
+        .height(Length::Fill);
+
+    container(scrolled)
         .width(Length::Fill)
         .height(Length::Fill)
         .center_x(Length::Fill)

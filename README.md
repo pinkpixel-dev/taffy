@@ -1,5 +1,7 @@
 # Taffy
 
+<img src="./icon.png" alt="Taffy logo" width="300" height="300" />
+
 Taffy is a small Rust screen capture app for modern Wayland desktops, with a focus on Arch Linux and COSMIC. It aims to stay simple, approachable, and practical while still covering the everyday capture tasks: screenshots, videos, and GIFs.
 
 ## Current Features
