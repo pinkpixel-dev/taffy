@@ -134,4 +134,4 @@ Then make sure an icon named `taffy` is available to your icon theme, or adapt t
 - Selection mode depends on `slurp` right now.
 - The recording timer is in the app UI; there is not yet a floating in-recording overlay.
 - Audio and microphone capture are not implemented yet.
-- The region-selection flow is functional, but it is not yet a fully native Taffy overlay like Kooha’s custom selector window.
+- The region-selection flow is functiona.
