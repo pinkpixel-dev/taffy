@@ -7,7 +7,10 @@ use config::{AppConfig, CaptureKind, CaptureSource};
 use futures_util::stream::BoxStream;
 use iced::{
     Alignment, Element, Length, Size, Subscription, Task, Theme, application, keyboard, time,
-    widget::{button, checkbox, column, container, pick_list, row, slider, text, text_input},
+    widget::{
+        button, button as button_widget, checkbox, column, container, pick_list, row, slider, text,
+        text_input,
+    },
     window,
 };
 use shortcuts::{ShortcutAction, ShortcutEvent, ShortcutSpec};
@@ -402,11 +405,24 @@ fn view(app: &Taffy) -> Element<'_, Message> {
     .spacing(12)
     .align_y(Alignment::Center);
 
+    let whole_screen_selected = app.config.capture_source == CaptureSource::WholeScreen;
+    let selection_selected = app.config.capture_source == CaptureSource::Interactive;
+
     let selection_row = row![
         button("Whole Screen")
+            .style(if whole_screen_selected {
+                button_widget::primary
+            } else {
+                button_widget::secondary
+            })
             .on_press(Message::CaptureSourceChanged(CaptureSource::WholeScreen))
             .padding([14, 18]),
         button("Selection")
+            .style(if selection_selected {
+                button_widget::primary
+            } else {
+                button_widget::secondary
+            })
             .on_press(Message::CaptureSourceChanged(CaptureSource::Interactive))
             .padding([14, 18]),
     ]
