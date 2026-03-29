@@ -22,7 +22,9 @@ Taffy is a small Rust screen capture app for modern Wayland desktops, with a foc
 - Taffy works through the portal stack first so it behaves better on Wayland and newer desktops.
 - On the current COSMIC portal backend, `ScreenCast` and `Screenshot` are available.
 - On the current COSMIC portal backend, `GlobalShortcuts` is not exposed, so compositor-wide shortcuts are not currently available through the standard portal path.
-- Taffy therefore supports focused-window shortcuts reliably, and it surfaces global-shortcut availability in the UI.
+- Taffy therefore only receives shortcuts while its own window is focused, and it surfaces that limitation in the UI.
+- In practice on COSMIC, this means screenshot shortcuts are not very useful when the Taffy window needs to stay out of the shot.
+- In practice on COSMIC, video and GIF capture should currently be treated as a start-and-stop-from-the-Taffy-window workflow.
 
 ## Selection Mode
 
@@ -90,7 +92,12 @@ Supported shortcut strings currently include:
 - `Enter`
 - `Escape`
 
-If the desktop ignores global shortcut binding, the same shortcuts still work while the Taffy window is focused.
+If the desktop ignores global shortcut binding, Taffy only sees shortcuts while the Taffy window is focused.
+
+For current COSMIC users, the practical guidance is:
+
+- screenshots should usually be taken another way if the Taffy window would be visible
+- videos and GIFs should generally be started and stopped from the Taffy UI, with any extra beginning or ending trimmed afterward if needed
 
 ## Taskbar Icon Notes
 
@@ -119,6 +126,7 @@ Then make sure an icon named `taffy` is available to your icon theme, or adapt t
 ## Current Limitations
 
 - COSMIC does not currently expose the Global Shortcuts portal interface used by Taffy.
+- Because of that, COSMIC users do not currently get true background screenshot or recording shortcuts.
 - Selection mode depends on `slurp` right now.
 - The recording timer is in the app UI; there is not yet a floating in-recording overlay.
 - Audio and microphone capture are not implemented yet.
