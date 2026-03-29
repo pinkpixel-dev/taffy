@@ -24,9 +24,18 @@ fn main() -> iced::Result {
         .window(window::Settings {
             size: Size::new(560.0, 520.0),
             minimizable: false,
+            icon: load_window_icon(),
+            platform_specific: window::settings::PlatformSpecific {
+                application_id: "taffy".into(),
+                ..window::settings::PlatformSpecific::default()
+            },
             ..window::Settings::default()
         })
         .run()
+}
+
+fn load_window_icon() -> Option<window::Icon> {
+    window::icon::from_file_data(include_bytes!("../icon.png"), None).ok()
 }
 
 fn app_theme(_: &Taffy) -> Theme {

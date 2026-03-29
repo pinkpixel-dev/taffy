@@ -1,42 +1,46 @@
 # Taffy
 
-Taffy is a small Rust screen capture app aimed at modern Wayland desktops, especially COSMIC on Arch Linux.
+Taffy is a small Rust screen capture app for modern Wayland desktops, with a focus on Arch Linux and COSMIC. It aims to stay simple, approachable, and practical while still covering the everyday capture tasks: screenshots, videos, and GIFs.
 
-## What it does right now
+## Current Features
 
-- Takes screenshots through the XDG desktop portal
-- Records videos through the ScreenCast portal and GStreamer
-- Converts recordings to GIFs after capture stops
-- Stores a few simple preferences:
-  - interactive vs whole-screen source selection
-  - frame rate
-  - start delay
-  - stop delay
-  - start, stop, and screenshot shortcut preferences
+- Screenshot capture through the XDG Screenshot portal
+- Video recording through the ScreenCast portal and GStreamer
+- GIF capture by recording to video first and converting with `ffmpeg`
+- Whole-screen recording
+- Region recording through a selection flow
+- Configurable frame rate
+- Configurable start and stop delay
+- Pointer visibility toggle
+- Per-type output folders for screenshots, GIFs, and videos
+- Embedded window icon and Linux application id
+- Keyboard shortcut preferences for start, stop, and screenshot
+- Focused-window shortcut handling when global shortcuts are unavailable
 
-## Current design choices
+## Current Behavior On COSMIC
 
-- Taffy intentionally uses the portal stack first so it can behave better on newer desktops like COSMIC.
-- Screenshot capture relies on the compositor's portal UI.
-- Video and GIF capture use the ScreenCast portal, then record the granted PipeWire stream with GStreamer.
-- Taffy asks the Global Shortcuts portal for start, stop, and screenshot shortcuts when the desktop supports it.
-- On the current COSMIC portal backend, global shortcuts are not exposed, so Taffy falls back to focused-window shortcuts.
-- Selection recording currently uses `slurp` after the portal share flow so Taffy can crop the granted monitor stream.
+- Taffy works through the portal stack first so it behaves better on Wayland and newer desktops.
+- On the current COSMIC portal backend, `ScreenCast` and `Screenshot` are available.
+- On the current COSMIC portal backend, `GlobalShortcuts` is not exposed, so compositor-wide shortcuts are not currently available through the standard portal path.
+- Taffy therefore supports focused-window shortcuts reliably, and it surfaces global-shortcut availability in the UI.
 
-## Run
+## Selection Mode
 
-```bash
-cargo run
-```
+Selection mode currently works like this:
 
-To install it as a launcher later, copy `assets/taffy.desktop` into `~/.local/share/applications/` after you have a built `taffy` binary somewhere on your `PATH`.
+1. Taffy asks the ScreenCast portal for a monitor source.
+2. After permission is granted, Taffy uses `slurp` to collect the region rectangle.
+3. Taffy records the full granted monitor stream.
+4. After recording stops, Taffy crops the finished file with `ffmpeg` using the actual recorded video dimensions.
 
-## Runtime requirements
+This approach is intentional for now because it is more reliable than doing live cropping inside the recording pipeline on scaled displays.
 
-On Arch Linux, make sure these pieces are available:
+## Runtime Requirements
+
+On Arch Linux, install at least:
 
 - `xdg-desktop-portal`
-- a portal backend for your session, such as `xdg-desktop-portal-cosmic`
+- `xdg-desktop-portal-cosmic` or another portal backend appropriate for your session
 - `pipewire`
 - `gstreamer`
 - `gst-plugins-good`
@@ -45,8 +49,77 @@ On Arch Linux, make sure these pieces are available:
 - `ffmpeg`
 - `slurp` for Selection mode recording
 
-## Notes
+Example:
 
-- Selection recording asks the portal for a monitor first, then uses `slurp` to choose the crop rectangle.
-- Whole-screen recording asks the portal for monitor-only sources.
-- GIF capture records to a temporary MP4 first, then converts it with `ffmpeg`.
+```bash
+sudo pacman -S xdg-desktop-portal xdg-desktop-portal-cosmic pipewire gstreamer gst-plugins-good gst-plugins-bad gst-plugins-ugly ffmpeg slurp
+```
+
+## Running
+
+For development:
+
+```bash
+cargo run
+```
+
+## Output Folders
+
+By default, Taffy saves:
+
+- Screenshots to `~/Pictures/Taffy`
+- Videos to `~/Videos/Taffy`
+- GIFs to `~/Videos/Taffy`
+
+These can be changed in the app preferences.
+
+## Shortcuts
+
+Taffy currently supports three configurable shortcuts:
+
+- Start recording
+- Stop recording
+- Take screenshot
+
+Supported shortcut strings currently include:
+
+- Letters and digits, such as `Ctrl+I` or `Ctrl+Shift+R`
+- `Print`
+- `Space`
+- `Tab`
+- `Enter`
+- `Escape`
+
+If the desktop ignores global shortcut binding, the same shortcuts still work while the Taffy window is focused.
+
+## Taskbar Icon Notes
+
+Taffy embeds `icon.png` into the app window and also sets its Linux application id to `taffy`.
+
+If your desktop still does not show the taskbar icon when launching with `cargo run`, the desktop may be preferring desktop-entry integration over the raw window icon. In that case, install the desktop file and icon into your local application directories.
+
+## Desktop Integration
+
+The project includes a desktop entry at [assets/taffy.desktop](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/assets/taffy.desktop).
+
+For launcher integration, copy it to:
+
+```bash
+~/.local/share/applications/taffy.desktop
+```
+
+Then make sure an icon named `taffy` is available to your icon theme, or adapt the desktop entry to point at an explicit icon path.
+
+## Project Docs
+
+- [OVERVIEW.md](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/OVERVIEW.md): technical overview and development guide
+- [CHANGELOG.md](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/CHANGELOG.md): project history so far
+- [LICENSE](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/LICENSE): Apache 2.0 license
+
+## Current Limitations
+
+- COSMIC does not currently expose the Global Shortcuts portal interface used by Taffy.
+- Selection mode depends on `slurp` right now.
+- The recording timer is in the app UI; there is not yet a floating in-recording overlay.
+- Audio and microphone capture are not implemented yet.
+- The region-selection flow is functional, but it is not yet a fully native Taffy overlay like Kooha’s custom selector window.

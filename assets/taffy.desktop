@@ -4,5 +4,6 @@ Name=Taffy
 Comment=Simple screen capture for Wayland and COSMIC
 Exec=taffy
 Terminal=false
+Icon=taffy
 Categories=Utility;Graphics;
 Keywords=screenshot;screen recording;gif;wayland;cosmic;
