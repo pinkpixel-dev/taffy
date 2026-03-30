@@ -31,6 +31,16 @@ All notable project work so far is documented here.
   - post-record crop with `ffmpeg`
 - Screenshot save path handling to move portal screenshots into the configured output directory
 - Per-type save directory preferences for screenshots, GIFs, and videos
+- Packaging metadata and build flow for:
+  - AppImage via `cargo-appimage`
+  - `.deb` via `cargo-deb`
+  - `.rpm` via `cargo-generate-rpm`
+- Dedicated packaging scripts:
+  - [scripts/build-appimage.sh](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/scripts/build-appimage.sh)
+  - [scripts/build-packages.sh](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/scripts/build-packages.sh)
+- AppStream metainfo for packaged builds
+- GitHub release artifacts published as AppImage, `.deb`, and `.rpm`
+- [ROADMAP.md](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/ROADMAP.md) to track near-term product, platform, and packaging work
 
 ### Changed
 
@@ -39,7 +49,9 @@ All notable project work so far is documented here.
 - Removed the earlier minimize-first behavior because it left the app unrecoverable in practice
 - Updated selection button styling so the active source is visually obvious
 - Improved runtime messaging around shortcut support on COSMIC
-- Updated README content to reflect current runtime behavior and requirements
+- Updated README, OVERVIEW, and packaging documentation to reflect current runtime behavior, requirements, and release artifacts
+- Updated installation guidance so end users are directed to download packaged GitHub release artifacts instead of building packages locally
+- Added RPM release-download installation guidance for RPM-based Linux distributions
 
 ### Fixed
 
@@ -55,3 +67,4 @@ All notable project work so far is documented here.
 - Audio capture and microphone capture are still pending
 - A native floating recording overlay is still pending
 - Native in-app region selection is still pending; current selection uses `slurp`
+- RPM dependency metadata may still need distro-specific tuning depending on the target RPM-based system

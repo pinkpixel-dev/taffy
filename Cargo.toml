@@ -1,6 +1,14 @@
 [package]
 name = "taffy"
 version = "1.0.0"
+description = "Simple screen capture for the COSMIC desktop on Wayland"
+authors = ["Jessica Doering <admin@pinkpixel.dev>"]
+license = "Apache-2.0"
+repository = "https://github.com/pinkpixel-dev/taffy"
+homepage = "https://github.com/pinkpixel-dev/taffy"
+readme = "README.md"
+keywords = ["screenshot", "screen-recording", "gif", "wayland", "cosmic"]
+categories = ["graphics", "multimedia"]
 edition = "2024"
 
 [dependencies]
@@ -15,3 +23,51 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 tokio = { version = "1.48.0", features = ["macros", "process", "rt-multi-thread", "sync", "time"] }
 url = "2.5.7"
+
+[package.metadata.appimage]
+assets = ["packaging/appimage"]
+icon = "icon.png"
+desktop_entry = "assets/taffy.desktop"
+
+[package.metadata.deb]
+copyright = "2026 Jessica Doering"
+section = "graphics"
+priority = "optional"
+depends = [
+    "$auto",
+    "xdg-desktop-portal",
+    "xdg-desktop-portal-cosmic",
+    "pipewire",
+    "ffmpeg",
+    "slurp",
+]
+assets = [
+    ["target/release/taffy", "usr/bin/taffy", "755"],
+    ["assets/taffy.desktop", "usr/share/applications/taffy.desktop", "644"],
+    ["icon.png", "usr/share/icons/hicolor/512x512/apps/taffy.png", "644"],
+    ["packaging/metainfo/taffy.appdata.xml", "usr/share/metainfo/taffy.appdata.xml", "644"],
+    ["LICENSE", "usr/share/doc/taffy/LICENSE", "644"],
+]
+extended-description = """\
+Taffy is a small Rust screen capture app for the COSMIC desktop on Wayland.
+It supports screenshots, video recording, and GIF creation through portals,
+PipeWire, GStreamer, ffmpeg, and slurp.
+"""
+
+[package.metadata.generate-rpm]
+summary = "Simple screen capture for the COSMIC desktop on Wayland"
+license = "Apache-2.0"
+assets = [
+    { source = "target/release/taffy", dest = "/usr/bin/taffy", mode = "755" },
+    { source = "assets/taffy.desktop", dest = "/usr/share/applications/taffy.desktop", mode = "644" },
+    { source = "icon.png", dest = "/usr/share/icons/hicolor/512x512/apps/taffy.png", mode = "644" },
+    { source = "packaging/metainfo/taffy.appdata.xml", dest = "/usr/share/metainfo/taffy.appdata.xml", mode = "644" },
+    { source = "LICENSE", dest = "/usr/share/doc/taffy/LICENSE", mode = "644" },
+]
+
+[package.metadata.generate-rpm.requires]
+ffmpeg = "*"
+pipewire = "*"
+slurp = "*"
+xdg-desktop-portal = "*"
+xdg-desktop-portal-cosmic = "*"

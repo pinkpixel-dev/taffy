@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>cargo-appimage.desktop</id>
+  <name>Taffy</name>
+  <summary>Simple screen capture for the COSMIC desktop on Wayland</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  <launchable type="desktop-id">cargo-appimage.desktop</launchable>
+  <developer id="pinkpixel.dev">
+    <name>Pink Pixel</name>
+  </developer>
+  <description>
+    <p>
+      Taffy is a small Rust screen capture app for the COSMIC desktop on Wayland.
+      It supports screenshots, video recording, and GIF creation through the
+      portal stack, PipeWire, GStreamer, ffmpeg, and slurp.
+    </p>
+  </description>
+  <categories>
+    <category>Graphics</category>
+  </categories>
+  <keywords>
+    <keyword>screenshot</keyword>
+    <keyword>recording</keyword>
+    <keyword>gif</keyword>
+    <keyword>wayland</keyword>
+    <keyword>cosmic</keyword>
+  </keywords>
+  <url type="homepage">https://github.com/pinkpixel-dev/taffy</url>
+</component>

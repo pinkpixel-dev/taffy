@@ -103,6 +103,85 @@ For development:
 cargo run
 ```
 
+## Install From GitHub Releases
+
+Most users should download a packaged release instead of building Taffy locally.
+
+Current release page:
+
+- [Taffy v1.0.0 release](https://github.com/pinkpixel-dev/taffy/releases/tag/v1.0.0)
+
+Direct downloads:
+
+- AppImage:
+  `https://github.com/pinkpixel-dev/taffy/releases/download/v1.0.0/taffy.AppImage`
+- Debian package:
+  `https://github.com/pinkpixel-dev/taffy/releases/download/v1.0.0/taffy_1.0.0-1_amd64.deb`
+- RPM package:
+  `https://github.com/pinkpixel-dev/taffy/releases/download/v1.0.0/taffy-1.0.0-1.x86_64.rpm`
+
+### AppImage
+
+Download it, make it executable, and run it:
+
+```bash
+mkdir -p ~/Applications
+curl -L https://github.com/pinkpixel-dev/taffy/releases/download/v1.0.0/taffy.AppImage -o ~/Applications/taffy.AppImage
+chmod +x ~/Applications/taffy.AppImage
+~/Applications/taffy.AppImage
+```
+
+### Debian And Ubuntu
+
+Download the `.deb` package and install it with `apt`:
+
+```bash
+curl -L https://github.com/pinkpixel-dev/taffy/releases/download/v1.0.0/taffy_1.0.0-1_amd64.deb -o /tmp/taffy_1.0.0-1_amd64.deb
+sudo apt install /tmp/taffy_1.0.0-1_amd64.deb
+```
+
+If your system does not support installing a local package through `apt`, use:
+
+```bash
+sudo dpkg -i /tmp/taffy_1.0.0-1_amd64.deb
+sudo apt -f install
+```
+
+### RPM-Based Distributions
+
+Download the `.rpm` package and install it with your distro package manager:
+
+For Fedora, Nobara, or other `dnf`-based systems:
+
+```bash
+curl -L https://github.com/pinkpixel-dev/taffy/releases/download/v1.0.0/taffy-1.0.0-1.x86_64.rpm -o /tmp/taffy-1.0.0-1.x86_64.rpm
+sudo dnf install /tmp/taffy-1.0.0-1.x86_64.rpm
+```
+
+For openSUSE or other `zypper`-based systems:
+
+```bash
+sudo zypper install /tmp/taffy-1.0.0-1.x86_64.rpm
+```
+
+### Notes
+
+- These packages are intended for Linux systems running the COSMIC desktop on Wayland.
+- You still need the runtime dependencies listed above, especially the COSMIC portal backend and media tools.
+- RPM dependency names can vary more across distros, so some RPM-based systems may still need package metadata refinement.
+- If you want to browse all published assets for future versions, use the GitHub releases page:
+  `https://github.com/pinkpixel-dev/taffy/releases`
+
+## Packaging For Maintainers
+
+Taffy also includes package metadata for:
+
+- AppImage through `cargo-appimage`
+- `.deb` through `cargo-deb`
+- `.rpm` through `cargo-generate-rpm`
+
+This is mainly useful if you are maintaining release artifacts or testing packaging changes locally.
+
 ## Output Folders
 
 By default, Taffy saves:

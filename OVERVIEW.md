@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Taffy is a lightweight Wayland screen capture utility built in Rust. The project targets modern Linux desktops, especially COSMIC on Arch Linux, where older recorder stacks can be unreliable or incomplete.
+Taffy is a lightweight Wayland screen capture utility built in Rust. The project targets modern Linux desktops, especially COSMIC, where older recorder stacks can be unreliable or incomplete.
 
 The design goal is a small, friendly capture app with practical defaults and a backend strategy that works with desktop portals instead of fighting them.
 
@@ -15,6 +15,7 @@ The design goal is a small, friendly capture app with practical defaults and a b
 - Video and GIF post-processing: `ffmpeg` and `ffprobe`
 - Region selection helper: `slurp`
 - Config persistence: `serde` + JSON
+- Packaging: `cargo-appimage`, `cargo-deb`, and `cargo-generate-rpm`
 
 ## Architecture
 
@@ -127,6 +128,8 @@ Taffy currently sets:
 
 - an embedded window icon from `icon.png`
 - a Linux application id of `taffy`
+- a desktop entry in [assets/taffy.desktop](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/assets/taffy.desktop)
+- AppStream metadata for packaged builds
 
 Why this matters:
 
@@ -138,6 +141,35 @@ If taskbar identity is still inconsistent, the next likely step is fuller deskto
 
 - `~/.local/share/applications/taffy.desktop`
 - a matching icon under the local icon theme path
+
+## Packaging
+
+Taffy now has first-party packaging support for:
+
+- AppImage
+- `.deb`
+- `.rpm`
+
+Implementation pieces:
+
+- packaging metadata in [Cargo.toml](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/Cargo.toml)
+- desktop entry in [assets/taffy.desktop](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/assets/taffy.desktop)
+- AppStream metadata in [packaging/metainfo/taffy.appdata.xml](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/packaging/metainfo/taffy.appdata.xml)
+- AppImage-specific helper metadata in [packaging/appimage/usr/share/metainfo/cargo-appimage.appdata.xml](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/packaging/appimage/usr/share/metainfo/cargo-appimage.appdata.xml)
+- build helpers in [scripts/build-appimage.sh](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/scripts/build-appimage.sh) and [scripts/build-packages.sh](/home/sizzlebop/PINKPIXEL/PROJECTS/CURRENT/taffy/scripts/build-packages.sh)
+
+Current status:
+
+- End users should install from GitHub release artifacts first instead of building local packages
+- The current `v1.0.0` release publishes direct-download Linux artifacts, including AppImage, Debian, and RPM packages
+- AppImage builds are working and suitable for release artifacts
+- `.deb` builds are working
+- `.rpm` builds are working, though dependency naming may still need distro-specific refinement
+
+Practical guidance:
+
+- README install instructions should prioritize release downloads for normal users
+- local packaging scripts are primarily a maintainer and release-engineering workflow
 
 ## Known Constraints
 
@@ -161,5 +193,6 @@ If taskbar identity is still inconsistent, the next likely step is fuller deskto
 
 ### Packaging
 
-- install desktop file and icon properly for smoother taskbar integration
-- prepare an Arch-friendly packaging flow
+- refine RPM dependency metadata for specific target distributions
+- consider adding CI automation for generating release packages
+- expand release validation across more COSMIC-capable distributions
