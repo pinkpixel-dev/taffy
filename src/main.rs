@@ -104,8 +104,9 @@ impl Taffy {
                 video_directory_value: config.video_directory.display().to_string(),
                 config,
                 status: "Ready to capture".into(),
-                shortcut_status: "Focused-window shortcuts are available whenever Taffy is active."
-                    .into(),
+                shortcut_status:
+                    "Focused-window shortcuts are available while the Taffy window is focused."
+                        .into(),
                 is_busy: false,
                 active_recording: None,
                 recording_started_at: None,
@@ -577,8 +578,8 @@ fn shortcut_status_view(app: &Taffy) -> Element<'_, Message> {
         );
     }
 
-    lines.push("If the desktop ignores global shortcuts, Taffy only sees shortcuts while its own window is focused.".into());
-    lines.push("On COSMIC right now, screenshots should be taken another way and recordings should generally be started and stopped from the Taffy UI.".into());
+    lines.push("If global shortcuts are unavailable on this desktop, Taffy only sees shortcuts while its own window is focused.".into());
+    lines.push("On COSMIC right now, that means screenshot shortcuts are usually impractical and recordings should generally be started and stopped from the Taffy UI.".into());
 
     text(lines.join("\n")).size(13).into()
 }
@@ -647,7 +648,7 @@ fn shortcuts_view(app: &Taffy) -> Element<'_, Message> {
         text("Keyboard shortcuts").size(22),
         text("Use letters, digits, or keys like Print, Space, Tab, Enter, and Escape. Press Apply after changing portal shortcuts.")
             .size(13),
-        text("On COSMIC today, these only work while the Taffy window is focused.")
+        text("On COSMIC right now, portal-level global shortcuts are unavailable, so these only work while the Taffy window is focused.")
             .size(13),
         text_input("Start recording shortcut", &app.start_shortcut_value)
             .on_input(Message::StartShortcutChanged)
@@ -669,7 +670,7 @@ fn shortcuts_view(app: &Taffy) -> Element<'_, Message> {
 
 fn help_view<'a>() -> Element<'a, Message> {
     text(
-        "On your current COSMIC portal backend, ScreenCast and Screenshot are available but Global Shortcuts are not. That means Taffy only sees shortcuts while its own window is focused, so COSMIC users should treat recording as a start-and-stop-from-the-UI workflow for now and use another screenshot method when the UI needs to stay out of the shot. Selection mode currently uses `slurp` for region picking after the share flow.",
+        "On the current COSMIC portal backend, ScreenCast and Screenshot are available but Global Shortcuts are not. That means Taffy only sees shortcuts while its own window is focused, so COSMIC users should treat recording as a start-and-stop-from-the-UI workflow for now and use another screenshot method when the UI needs to stay out of the shot. Selection mode currently uses `slurp` for region picking after the share flow.",
     )
     .size(13)
     .into()

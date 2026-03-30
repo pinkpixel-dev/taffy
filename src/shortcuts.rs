@@ -57,7 +57,7 @@ pub fn portal_shortcuts(spec: ShortcutSpec) -> BoxStream<'static, ShortcutEvent>
             Err(error) => {
                 let message = error.to_string();
                 let detail = if message.contains("org.freedesktop.portal.GlobalShortcuts") {
-                    "Global shortcuts are not exposed by the active portal backend on this desktop. Focused-window shortcuts still work while Taffy is active.".to_string()
+                    "Global shortcuts are not exposed by the active portal backend on this desktop. Taffy can still use focused-window shortcuts while its window is focused.".to_string()
                 } else {
                     format!("Global shortcuts unavailable on this desktop: {error}")
                 };

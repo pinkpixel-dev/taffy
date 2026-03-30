@@ -4,7 +4,21 @@
   <img src="./icon.png" alt="Taffy logo" width="300" height="300" />
 </p>
 
-Taffy is a small Rust screen capture app for modern Wayland desktops, with a focus on Arch Linux and COSMIC. It aims to stay simple, approachable, and practical while still covering the everyday capture tasks: screenshots, videos, and GIFs.
+Taffy is a small Rust screen capture app for the COSMIC desktop on Wayland. It aims to stay simple, approachable, and practical while still covering the everyday capture tasks: screenshots, videos, and GIFs.
+
+## Supported Environment
+
+Taffy should currently be treated as a COSMIC-only app.
+
+- Supported target: Linux systems running the COSMIC desktop on Wayland
+- Not supported: non-COSMIC desktops or X11 sessions
+- Arch Linux is not required by the codebase itself
+
+Taffy is built on standard Linux pieces such as XDG desktop portals, PipeWire, GStreamer, `ffmpeg`, and `slurp`. Nothing in the code currently ties it specifically to Arch Linux. In principle, it should run on other Linux distributions that provide COSMIC plus the required runtime packages.
+
+That means the real requirement is COSMIC, not Arch. Arch is simply the environment this project has been centered around so far, and the package examples below use Arch package names.
+
+Other distributions should be considered possible-but-not-yet-verified targets. If you are on Ubuntu, Debian, Pop!_OS, or another `apt`-based system, the main thing to check is whether your repositories actually provide the COSMIC session and `xdg-desktop-portal-cosmic`.
 
 ## Current Features
 
@@ -43,10 +57,10 @@ This approach is intentional for now because it is more reliable than doing live
 
 ## Runtime Requirements
 
-On Arch Linux, install at least:
+Taffy currently expects all of the following to be available:
 
 - `xdg-desktop-portal`
-- `xdg-desktop-portal-cosmic` or another portal backend appropriate for your session
+- `xdg-desktop-portal-cosmic`
 - `pipewire`
 - `gstreamer`
 - `gst-plugins-good`
@@ -55,11 +69,31 @@ On Arch Linux, install at least:
 - `ffmpeg`
 - `slurp` for Selection mode recording
 
-Example:
+On Arch Linux:
 
 ```bash
 sudo pacman -S xdg-desktop-portal xdg-desktop-portal-cosmic pipewire gstreamer gst-plugins-good gst-plugins-bad gst-plugins-ugly ffmpeg slurp
 ```
+
+On Debian/Ubuntu-family systems with COSMIC packages available, the equivalent package names are typically:
+
+- `xdg-desktop-portal`
+- `xdg-desktop-portal-cosmic`
+- `pipewire`
+- `gstreamer1.0-tools`
+- `gstreamer1.0-plugins-good`
+- `gstreamer1.0-plugins-bad`
+- `gstreamer1.0-plugins-ugly`
+- `ffmpeg`
+- `slurp`
+
+Example:
+
+```bash
+sudo apt install xdg-desktop-portal xdg-desktop-portal-cosmic pipewire gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly ffmpeg slurp
+```
+
+If `apt` cannot find `xdg-desktop-portal-cosmic`, that usually means your distro or enabled repositories do not currently ship the COSMIC portal backend. In that case, Taffy should be treated as unsupported on that system for now.
 
 ## Running
 
@@ -129,9 +163,11 @@ Then make sure an icon named `taffy` is available to your icon theme, or adapt t
 
 ## Current Limitations
 
+- Taffy is currently only supported on COSMIC.
+- Other desktops may expose different portal behavior, and this project is not currently documenting or supporting those paths.
 - COSMIC does not currently expose the Global Shortcuts portal interface used by Taffy.
 - Because of that, COSMIC users do not currently get true background screenshot or recording shortcuts.
 - Selection mode depends on `slurp` right now.
 - The recording timer is in the app UI; there is not yet a floating in-recording overlay.
 - Audio and microphone capture are not implemented yet.
-- The region-selection flow is functiona.
+- The region-selection flow is functional, but it is not yet a fully native Taffy overlay.
